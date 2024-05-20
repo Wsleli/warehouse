@@ -1,10 +1,10 @@
 package com.lili.bus.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lili.bus.entity.Customer;
 import com.lili.bus.mapper.CustomerMapper;
 import com.lili.bus.mapper.GoodsMapper;
 import com.lili.bus.service.ICustomerService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +41,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     public boolean removeById(Serializable id) {
         return super.removeById(id);
     }
+
     @Override
     public Customer getById(Serializable id) {
         return super.getById(id);
@@ -53,13 +54,14 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
     /**
      * 根据客户id删除客户
-     * @param id    客户id
+     *
+     * @param id 客户id
      */
     @Override
     public void deleteCustomerById(Integer id) {
-        //根据客户id删除商品销售
+        // 根据客户id删除商品销售
         goodsMapper.deleteSaleByCustomerId(id);
-        //根据客户id删除商品销售退货
+        // 根据客户id删除商品销售退货
         goodsMapper.deleteSaleBackByCustomerId(id);
         this.removeById(id);
     }

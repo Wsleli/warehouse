@@ -25,6 +25,7 @@ import java.util.Date;
 
 /**
  * 登陆前端控制器
+ *
  * @Author: Wsleli Wiliams
  * @Date: 2024/5/17 21:33
  */
@@ -36,23 +37,23 @@ public class LoginController {
     private ILoginfoService loginfoService;
 
     @RequestMapping("login")
-    public ResultObj login(UserVo userVo,String code,HttpSession session){
+    public ResultObj login(UserVo userVo, String code, HttpSession session) {
 
-        //获得存储在session中的验证码
+        // 获得存储在session中的验证码
         String sessionCode = (String) session.getAttribute("code");
-        if (code!=null&&sessionCode.equals(code)){
+        if (code != null && sessionCode.equals(code)) {
             Subject subject = SecurityUtils.getSubject();
-            AuthenticationToken token = new UsernamePasswordToken(userVo.getLoginname(),userVo.getPwd());
+            AuthenticationToken token = new UsernamePasswordToken(userVo.getLoginname(), userVo.getPwd());
             try {
-                //对用户进行认证登陆
+                // 对用户进行认证登陆
                 subject.login(token);
-                //通过subject获取以认证活动的user
+                // 通过subject获取以认证活动的user
                 ActiverUser activerUser = (ActiverUser) subject.getPrincipal();
-                //将user存储到session中
-                WebUtils.getSession().setAttribute("user",activerUser.getUser());
-                //记录登陆日志
+                // 将user存储到session中
+                WebUtils.getSession().setAttribute("user", activerUser.getUser());
+                // 记录登陆日志
                 Loginfo entity = new Loginfo();
-                entity.setLoginname(activerUser.getUser().getName()+"-"+activerUser.getUser().getLoginname());
+                entity.setLoginname(activerUser.getUser().getName() + "-" + activerUser.getUser().getLoginname());
                 entity.setLoginip(WebUtils.getRequest().getRemoteAddr());
                 entity.setLogintime(new Date());
                 loginfoService.save(entity);
@@ -62,23 +63,23 @@ public class LoginController {
                 e.printStackTrace();
                 return ResultObj.LOGIN_ERROR_PASS;
             }
-        }else {
+        } else {
             return ResultObj.LOGIN_ERROR_CODE;
         }
-
     }
 
     /**
      * 得到登陆验证码
+     *
      * @param response
      * @param session
      * @throws IOException
      */
     @RequestMapping("getCode")
-    public void getCode(HttpServletResponse response, HttpSession session) throws IOException{
-        //定义图形验证码的长和宽
-        LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(116, 36,4,5);
-        session.setAttribute("code",lineCaptcha.getCode());
+    public void getCode(HttpServletResponse response, HttpSession session) throws IOException {
+        // 定义图形验证码的长和宽
+        LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(116, 36, 4, 5);
+        session.setAttribute("code", lineCaptcha.getCode());
         try {
             ServletOutputStream outputStream = response.getOutputStream();
             lineCaptcha.write(outputStream);
@@ -87,5 +88,4 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-
 }

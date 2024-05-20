@@ -47,5 +47,4 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements ID
         return super.save(entity);
     }
 
-
 }

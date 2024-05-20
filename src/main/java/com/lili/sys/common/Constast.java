@@ -54,5 +54,5 @@ public class Constast {
     /**
      * 用户默认图片
      */
-    public static final String DEFAULT_IMG_USER="/resources/images/defaultUserTitle.jpg";
+    public static final String DEFAULT_IMG_USER="/images/defaultUserTitle.jpg";
 }
